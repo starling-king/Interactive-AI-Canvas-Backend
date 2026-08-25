@@ -1,0 +1,38 @@
+problem statement
+a personal portfolio website 
+visitors can view the projects and details and judge to give the job or not
+owner can reach to masses and proof of work, better visitor judgement 
+
+Functional requirements
+
+visitor:
+can view all projects
+can contact with admin
+can view project details
+easily able to navigate and operate
+quick understanding of the what he knows, what he face , how it solve.
+knowledge of background
+picture of the admin
+
+Admin:
+can login
+can add project
+can edit projects
+can delete projects
+can add, edit, delete images, content, contact
+contact edit 
+
+flow:
+visitor = Home:
+- Quick intro (who you are + what you do + top skills)
+- Featured projects (top 2–3)
+
+From here user can:
+→ Jump to Projects
+→ Jump to Contact
+→ Jump to GitHub
+jump to skills
+jump to education
+
+admin:
+button login as admin -> session login backend side -> project link, images ,and description per card -> edit and delete and add buttons per card their -> the website content editable and profile photo edit qualities -> contact editing feature -> publish button 

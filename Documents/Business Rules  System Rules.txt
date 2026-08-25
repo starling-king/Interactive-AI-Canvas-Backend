@@ -1,0 +1,166 @@
+  Business Rules / System Rules  
+
+  Project Rules  
+
+  Only published projects are visible to visitors
+  Draft projects are visible only in admin dashboard
+  Featured projects must also be published
+  Home page shows only top 2–3 featured projects
+  Each project must have a unique slug
+  Projects can be filtered by category
+
+  Content Rules  
+
+  Profile photo, GitHub link, LinkedIn link, and about text must be editable from admin panel
+  Public site should always show the latest saved content
+  Empty or missing content should show fallback text instead of breaking the page
+
+  Contact Rules  
+
+  Visitors can send messages through contact form
+  Admin can view all messages
+  Each message must have read/unread status
+  Admin can mark a message as read
+
+  Admin Rules  
+
+  Only authenticated admin can access dashboard
+  Admin session must be required for create, edit, delete actions
+  Logout must end the session
+  Passwords must be stored as hashes only
+
+  Validation Rules  
+
+  Title is required
+  Slug is required and unique
+  Email must be valid
+  Description is required
+  Images must be valid file paths or URLs
+  Contact message must contain name, email, and message
+
+  Display Rules  
+
+  Website must work on mobile and desktop
+  Public pages must load only published data
+  Home page must show quick intro, featured projects, skills, and contact links
+
+
+Models:
+
+  Data Model Design  
+
+  Project Entity:  
+
+  id (unique)
+  title
+  description
+  problem
+  approach
+  solution
+  result
+  tech_stack (array)
+  github_link
+  live_link
+  images (array)
+  created_at
+  updated_at
+
+---
+
+  User/Admin Entity:  
+
+  id
+  username
+  password (hashed)
+
+---
+
+  Content Entity (for editable sections):  
+
+  id
+  section_name (about / skills / contact)
+  content
+
+---
+
+  Contact Messages:  
+
+  id
+  name
+  email
+  message
+  created_at
+
+
+
+API ROUTE:
+The Complete API Specification
+🟢 Public Routes (Visitor Side)
+No authentication required. Optimized for fast loading.
+
+Projects
+
+GET /api/projects
+
+Usage: Fetch projects.
+
+Query Params: ?published=true (Always required for visitors), ?featured=true (For the home page top 2-3), ?category=web (For filtering).
+
+GET /api/projects/:slug
+
+Usage: Fetch detailed data for a single project using a clean URL slug (e.g., /api/projects/senior-citizen-site).
+
+Content (About, Skills, Details)
+
+GET /api/content
+
+Usage: Fetches all global content (skills, about text, social links, profile photo URL) in one single request to hit your "<2 seconds target" for the frontend.
+
+Contact
+
+POST /api/contact
+
+Usage: Submits the contact form. (Expects: name, email, message).
+
+🔴 Protected Routes (Admin Side)
+Requires Session Token or JWT in headers/cookies.
+
+Authentication
+
+POST /api/auth/login (Public) - Returns token/session.
+
+POST /api/auth/logout - Destroys the session.
+
+GET /api/auth/verify - Checks if the admin's token is still valid on page refresh.
+
+Project Management
+
+GET /api/admin/projects - Fetches ALL projects, including unpublished drafts.
+
+GET /api/admin/projects/:id - Fetches a specific project by database ID for editing.
+
+POST /api/admin/projects - Creates a new project (can be saved as draft).
+
+PUT /api/admin/projects/:id - Updates an existing project.
+
+DELETE /api/admin/projects/:id - Deletes a project.
+
+Media / Uploads (CRITICAL ADDITION)
+
+POST /api/admin/upload
+
+Usage: Accepts an image file, saves it (to your PythonAnywhere server or a cloud bucket like S3/Cloudinary), and returns the public URL string. You then save that URL string into your Project or Content database.
+
+Content Management
+
+PUT /api/admin/content/:section_key
+
+Usage: Updates specific content blocks (e.g., updating skills_list or github_link).
+
+Inbox / Lead Management
+
+GET /api/admin/messages - Fetches all contact form submissions.
+
+PUT /api/admin/messages/:id/read - Marks a message as read.
+
+DELETE /api/admin/messages/:id - Deletes spam/old messages.

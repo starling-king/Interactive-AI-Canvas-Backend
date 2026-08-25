@@ -1,0 +1,114 @@
+  Problem Statement  
+
+Build a personal portfolio website that converts visitors (recruiters/clients) into decision-makers within 30–60 seconds by clearly showcasing skills, real projects, and proof of work.
+
+The system should reduce friction in understanding:
+
+  Who the owner is
+  What skills they have
+  What problems they can solve
+  Why they are worth hiring
+
+---
+
+  Core Objective  
+
+  Fast trust building
+  Clear skill communication
+  Strong proof of execution
+  Easy contact conversion
+
+---
+
+  Functional Requirements  
+
+  Visitor Side:  
+
+  View all projects with clear categorization
+  View detailed project pages (problem → approach → solution → result)
+  Quick intro section (skills + role + value proposition)
+  Smooth navigation across sections
+  Contact form (simple + fast)
+  External links (GitHub, LinkedIn)
+  View skills, education, and background
+  Responsive design (mobile + desktop)
+  Fast loading (<2 seconds target)
+
+---
+
+  Admin Side:  
+
+  Secure login (session-based authentication)
+  Add / edit / delete projects
+  Upload and manage images
+  Edit website content (about, skills, contact)
+  Update profile photo
+  Publish/update changes dynamically
+
+---
+
+  Non-Functional Requirements  
+
+  Performance: fast loading and optimized assets
+  Usability: minimal clicks to reach key information
+  Scalability: easy to add new projects/content
+  Security: protected admin routes
+  Maintainability: modular backend structure
+
+---
+
+  User Flow (Visitor Journey)  
+
+1.   Landing (Home Page):  
+
+     Clear identity (Name + Role)
+     1-line value proposition
+     Top 2–3 featured projects
+
+2.   Trust Building:  
+
+     Skills section (stack + strengths)
+     Short background (education + focus)
+
+3.   Proof:  
+
+     Project list
+     Each project shows:
+
+       Problem
+       Approach
+       Solution
+       Result
+
+4.   Action:  
+
+     Contact section (form + links)
+     GitHub profile access
+
+---
+
+  Admin Flow  
+
+1. Login → Authentication → Dashboard
+2. Manage projects:
+
+     Create project card
+     Add images + description
+     Edit/delete existing entries
+3. Edit website content:
+
+     About section
+     Skills
+     Contact details
+4. Publish updates
+
+---
+
+  Key Design Principles  
+
+  Clarity over decoration
+  Speed over complexity
+  Proof over claims
+  Simplicity over features
+
+---

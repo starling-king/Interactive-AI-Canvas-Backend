@@ -1,0 +1,191 @@
+**Page-wise Requirements / UI Behavior Specification**
+
+---
+
+**1. Home Page**
+
+**Purpose:**
+Convert visitor attention into trust within 30 seconds.
+
+**Sections:**
+
+* Hero Section:
+
+  * Name
+  * Role
+  * 1-line value proposition
+  * Profile photo
+
+* Featured Projects:
+
+  * Show only projects where is_featured = true AND is_published = true
+  * Maximum 3 projects
+
+* Skills Section:
+
+  * List of skills from content entity
+
+* About Section:
+
+  * Short background text
+
+* Contact Links:
+
+  * GitHub
+  * LinkedIn
+  * Email CTA
+
+---
+
+**2. Projects List Page**
+
+**Purpose:**
+Allow users to scan all work quickly.
+
+**Behavior:**
+
+* Fetch only published projects
+
+* Display project cards:
+
+  * Title
+  * Short description
+  * Category
+  * Tech stack
+
+* Filtering:
+
+  * Filter by category
+
+* Navigation:
+
+  * Clicking a project opens detail page via slug
+
+---
+
+**3. Project Detail Page**
+
+**Purpose:**
+Show deep proof of work.
+
+**Sections:**
+
+* Title
+* Images (carousel or gallery)
+* Problem
+* Approach
+* Solution
+* Result
+* Tech Stack
+* GitHub link
+* Live link
+
+**Rules:**
+
+* Only accessible if project is published
+* If not found → show 404 page
+
+---
+
+**4. Contact Page**
+
+**Purpose:**
+Convert visitor into lead.
+
+**Fields:**
+
+* Name
+* Email
+* Message
+
+**Behavior:**
+
+* Submit via POST /api/contact
+* Show success or error message
+* Prevent empty submission
+
+---
+
+**5. Admin Login Page**
+
+**Purpose:**
+Authenticate admin.
+
+**Fields:**
+
+* Username or Email
+* Password
+
+**Behavior:**
+
+* On success → redirect to dashboard
+* On failure → show error message
+
+---
+
+**6. Admin Dashboard**
+
+**Purpose:**
+Central control panel.
+
+**Sections:**
+
+* Project Management
+* Content Management
+* Messages Inbox
+
+---
+
+**7. Project Management (Admin)**
+
+**Features:**
+
+* View all projects (published + draft)
+* Create new project
+* Edit project
+* Delete project
+
+**Fields:**
+
+* Title
+* Slug
+* Category
+* Description
+* Problem / Approach / Solution / Result
+* Tech stack
+* Links
+* Images (via upload API)
+* is_featured toggle
+* is_published toggle
+
+---
+
+**8. Content Management (Admin)**
+
+**Editable:**
+
+* About text
+* Skills list
+* Profile photo URL
+* GitHub link
+* LinkedIn link
+
+---
+
+**9. Messages Inbox (Admin)**
+
+**Features:**
+
+* View all messages
+* Mark as read
+* Delete message
+
+---
+
+**Error Handling (Global)**
+
+* Invalid routes → 404 page
+* Server errors → user-friendly message
+* Empty data → show fallback UI (not blank screen)
+
+---

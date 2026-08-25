@@ -1,0 +1,7 @@
+node_modules/
+.env
+*.log
+file.txt
+__pycache__/
+.vscode
+jsconfig.json
