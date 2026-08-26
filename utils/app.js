@@ -5,10 +5,10 @@ import globalError from "../error/global.error.js";
 
 //routers import
 import userRouter from "../routers/user.router.js";
-import workspaceRouter from "../routers/workspace.router.js";
-import canvasGraphRouter from "../routers/canvasGraph.router.js";
-import graphVersionRouter from "../routers/graphVersion.router.js";
-import aiOrchestrationRouter from "../routers/aiOrchestration.router.js";
+// import workspaceRouter from "../routers/workspace.router.js";
+// import canvasGraphRouter from "../routers/canvasGraph.router.js";
+// import graphVersionRouter from "../routers/graphVersion.router.js";
+// import aiOrchestrationRouter from "../routers/aiOrchestration.router.js";
 
 
 const app = express()
@@ -32,10 +32,10 @@ app.use(cookieParser())
 
 //router decleration
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/workspaces", workspaceRouter);
-app.use("/api/v1/canvas", canvasGraphRouter);
-app.use("/api/v1/versions", graphVersionRouter);
-app.use("/api/v1/ai", aiOrchestrationRouter);
+// app.use("/api/v1/workspaces", workspaceRouter);
+// app.use("/api/v1/canvas", canvasGraphRouter);
+// app.use("/api/v1/versions", graphVersionRouter);
+// app.use("/api/v1/ai", aiOrchestrationRouter);
 
 //setup global error
 
