@@ -1,7 +1,7 @@
 import { ApiError } from "../error/ApiErrors.error.js";
 import { asyncHandler } from "../error/asyncHandlers.error.js";
 import jwt  from "jsonwebtoken"
-import { Admin } from "../models/admin_users.model.js";
+import { Admin } from "../models/User.model.js";
 
 export const verifyJwt = asyncHandler(async (req, res, next) => {
     //take token from cookies and remove brearar keyword
