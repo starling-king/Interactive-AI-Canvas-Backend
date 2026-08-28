@@ -22,6 +22,9 @@ const adminSchema = new mongoose.Schema({
     },
     refreshToken:{
         type:String
+    },
+    avatarUrl:{
+        type:String
     }
 
 },{timestamps:true})
