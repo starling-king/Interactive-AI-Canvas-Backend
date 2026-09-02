@@ -39,4 +39,4 @@ const WorkspaceSchema = new mongoose.Schema({
 
 WorkspaceSchema.index({ userId: 1 });
 
-export const Workspace = mongoose.model("Workspace",WorkspaceSchema)
+export const Workspace = mongoose.model("Workspace", WorkspaceSchema)
