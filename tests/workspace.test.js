@@ -1,0 +1,69 @@
+import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from "vitest";
+import request from "supertest";
+import mongoose from "mongoose";
+
+import { app } from "../utils/app.js";
+import connectDB from "../data/connect.js";
+import { Admin } from "../models/User.model.js";
+import { Workspace } from "../models/Workspace.model.js";
+
+const DUMMY_USER = {
+    username: "canvasmaster",
+    email: "master@gmail.com",
+    passwordHash: "12345678"
+};
+
+let accessToken = "";
+let testWorkspaceSlug = "";
+
+beforeAll(async () => {
+    await connectDB();
+});
+
+afterAll(async () => {
+    await Workspace.deleteMany({ userId: await Admin.findOne({ email: DUMMY_USER.email }).select('_id') });
+    await Admin.deleteOne({ email: DUMMY_USER.email });
+    await mongoose.connection.close();
+});
+
+describe("Workspace Security & Creation Pipeline", () => {
+    // SETUP: Create user and get token
+    beforeEach(async () => {
+        await Admin.deleteOne({ email: DUMMY_USER.email });
+        await request(app).post("/api/v1/users/register").send(DUMMY_USER);
+
+        const loginRes = await request(app).post("/api/v1/users/login").send({
+            email: DUMMY_USER.email,
+            passwordHash: DUMMY_USER.passwordHash,
+        });
+        accessToken = loginRes.body.data.accessToken;
+    });
+
+    // 1. Test Data Integrity (Slug Generation)
+    it("should successfully create a workspace and generate a slug", async () => {
+        const res = await request(app)
+            .post("/api/v1/workspaces/createWorkspace")
+            .set("Cookie", [`accessToken=${accessToken}`])
+            .send({
+                title: "My Awesome Architecture",
+                diagramType: "flowchart",
+                isPublished: false // Private by default
+            });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.success).toBe(true);
+        expect(res.body.data.slug).toBeDefined();
+
+        testWorkspaceSlug = res.body.data.slug; // Save slug for the next test
+    });
+
+    // 2. Test The Security Bouncer (403 Forbidden on Private Drafts)
+    it("should block public access to a private workspace", async () => {
+        const res = await request(app)
+            .get(`/api/v1/workspaces/public/${testWorkspaceSlug}`); // Accessing public route[cite: 35]
+
+        // Expecting 403 because isPublished is false![cite: 35]
+        expect(res.statusCode).toBe(403);
+        expect(res.body.success).toBe(false);
+    });
+});
