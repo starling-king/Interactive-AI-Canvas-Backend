@@ -16,7 +16,7 @@ const WorkspaceSchema = new mongoose.Schema({
 
     slug: {
         type: String,
-        unique: true,
+        // unique: true,
         required:true
     },
 
@@ -37,6 +37,6 @@ const WorkspaceSchema = new mongoose.Schema({
 
 }, { timestamps: true })
 
-WorkspaceSchema.index({ userId: 1 });
+WorkspaceSchema.index({ userId: 1, slug: 1 }, { unique: true });
 
 export const Workspace = mongoose.model("Workspace", WorkspaceSchema)

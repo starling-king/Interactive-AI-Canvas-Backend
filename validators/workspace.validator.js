@@ -1,4 +1,5 @@
 import { z } from "zod";
+import mongoose from "mongoose";
 
 // 1. Define the base rules (Reusable)
 const titleRule = z
@@ -19,7 +20,13 @@ const diagramTypeRule = z
     });
 
 const isPublishedRule = z
-    .boolean({ invalid_type_error: "isPublished must be a boolean (true/false)" })
+    .preprocess((val) => {
+        if (typeof val === "string") {
+            if (val.toLowerCase() === "true") return true;
+            if (val.toLowerCase() === "false") return false;
+        }
+        return val;
+    }, z.boolean({ invalid_type_error: "isPublished must be a boolean (true/false)" }))
     .optional()
     .default(false);
 
@@ -29,16 +36,17 @@ export const createWorkspaceSchema = z.object({
     description: descriptionRule,
     diagramType: diagramTypeRule,
     isPublished: isPublishedRule,
-}).refine((data) => {
-    // THE BUSINESS RULE: If isPublished is true, description MUST exist
-    if (data.isPublished === true) {
-        return data.description && data.description.trim().length > 0;
-    }
-    return true; // Pass validation if not published
-}, {
-    message: "Cannot publish an incomplete draft. Please fill out the description.",
-    path: ["description"], // Tells the frontend exactly which field caused the error
-});
+})
+//     .refine((data) => {
+//     // THE BUSINESS RULE: If isPublished is true, description MUST exist
+//     if (data.isPublished === true) {
+//         return data.description && data.description.trim().length > 0;
+//     }
+//     return true; // Pass validation if not published
+// }, {
+//     message: "Cannot publish an incomplete draft. Please fill out the description.",
+//     path: ["description"], // Tells the frontend exactly which field caused the error
+// });
 
 // 3. The Update Schema
 export const updateWorkspaceSchema = z.object({
@@ -46,13 +54,20 @@ export const updateWorkspaceSchema = z.object({
     description: descriptionRule,
     diagramType: diagramTypeRule.optional(),
     isPublished: isPublishedRule,
-}).refine((data) => {
-    // If they are trying to publish during an update, they cannot send an empty description
-    if (data.isPublished === true && data.description !== undefined) {
-        return data.description.trim().length > 0;
-    }
-    return true;
-}, {
-    message: "Description cannot be empty when publishing.",
-    path: ["description"],
+})
+//     .refine((data) => {
+//     // If they are trying to publish during an update, they cannot send an empty description
+//     if (data.isPublished === true && data.description !== undefined) {
+//         return data.description.trim().length > 0;
+//     }
+//     return true;
+// }, {
+//     message: "Description cannot be empty when publishing.",
+//     path: ["description"],
+// });
+
+export const workspaceIdParamSchema = z.object({
+    id: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
+        message: "Invalid workspace ID format in URL",
+    }),
 });

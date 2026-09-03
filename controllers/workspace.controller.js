@@ -11,24 +11,36 @@ const createWorkspace = asyncHandler(async (req, res) => {
 
     try {
 
-        const { title, description, diagramType, published } = req.body;
+        const { title, description, diagramType, isPublished } = req.body;
 
-        const slug = slugify(title, {
+        let slug = slugify(title, {
             lower: true,
             strict: true,
             trim: true
         });
 
-        const createWorkspace = await Workspace.create({
+        let existingWorkspace = await Workspace.findOne({ userId: req.user._id, slug: slug });
+        let counter = 1;
+
+        while (existingWorkspace) {
+            const newSlug = `${slug}-${counter}`;
+            existingWorkspace = await Workspace.findOne({ userId: req.user._id, slug: newSlug });
+            if (!existingWorkspace) {
+                slug = newSlug;
+            }
+            counter++;
+        }
+
+        const newWorkspace = await Workspace.create({
             userId: req.user._id, 
             title,
             slug,
             description,
             diagramType,
-            isPublished: published || false
+            isPublished: isPublished || false
         })
 
-        return res.status(200).json(new ApiResponse(200, createWorkspace, "The project created successfully"))
+        return res.status(200).json(new ApiResponse(200, newWorkspace, "The project created successfully"))
     } catch (error) {
         const statusCode = error.statusCode || 500;
         return res.status(statusCode).json(
@@ -114,14 +126,14 @@ const updateWorkspace = asyncHandler(async (req, res) => {
 const deleteWorkspace = asyncHandler(async (req, res) => {
 
     try {
-        const projectId = req.params.id;
+        const workspaceId = req.params.id;
 
-        if (!projectId || !mongoose.Types.ObjectId.isValid(projectId)) {
+        if (!workspaceId || !mongoose.Types.ObjectId.isValid(workspaceId)) {
             throw new ApiError(400, "please enter the project id in url")
         }
 
         const workspace = await Workspace.findOneAndDelete({
-            _id: projectId,
+            _id: workspaceId,
             userId: req.user._id
         });
 
@@ -142,10 +154,31 @@ const deleteWorkspace = asyncHandler(async (req, res) => {
 
 })
 
+const getPublicWorkspaceById = asyncHandler(async (req, res) => {
+    const { slug } = req.params;
+
+    // if (!mongoose.Types.ObjectId.isValid(workspaceId)) {
+    //     throw new ApiError(400, "Invalid workspace ID");
+    // }
+
+    const workspace = await Workspace.findOne({ slug: slug });
+    
+    if (!workspace) {
+        throw new ApiError(404, "Workspace not found");
+    }
+
+    if (!workspace.isPublished) {
+        throw new ApiError(403, "This canvas is private and cannot be viewed via link.");
+    }
+
+    return res.status(200).json(new ApiResponse(200, workspace, "Public canvas loaded successfully"));
+});
+
 
 export {
     createWorkspace,
     getAllAdminWorkspaces,
     updateWorkspace,
     deleteWorkspace,
+    getPublicWorkspaceById,
 }
