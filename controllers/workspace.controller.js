@@ -19,12 +19,12 @@ const createWorkspace = asyncHandler(async (req, res) => {
             trim: true
         });
 
-        let existingWorkspace = await Workspace.findOne({ userId: req.user._id, slug: slug });
+        let existingWorkspace = await Workspace.findOne({ slug: slug });
         let counter = 1;
 
         while (existingWorkspace) {
             const newSlug = `${slug}-${counter}`;
-            existingWorkspace = await Workspace.findOne({ userId: req.user._id, slug: newSlug });
+            existingWorkspace = await Workspace.findOne({  slug: newSlug });
             if (!existingWorkspace) {
                 slug = newSlug;
             }
@@ -32,7 +32,7 @@ const createWorkspace = asyncHandler(async (req, res) => {
         }
 
         const newWorkspace = await Workspace.create({
-            userId: req.user._id, 
+            userId: req.user._id,
             title,
             slug,
             description,
@@ -109,7 +109,7 @@ const updateWorkspace = asyncHandler(async (req, res) => {
         const finalWorkspace = await Workspace.findByIdAndUpdate(
             workspaceId,
             updatePayload,
-            { new: true }
+            { returndocument: "after" }
         );
 
         return res.status(200).json(new ApiResponse(200, finalWorkspace, "Workspace updated successfully"));
@@ -142,11 +142,11 @@ const deleteWorkspace = asyncHandler(async (req, res) => {
         }
 
         // TODO: In Phase 2, we will add the cascading logic here to delete the associated CanvasGraphs and GraphVersions!
-     
+
         return res.status(200).json(new ApiResponse(200, null, "the project delete successfully"))
 
     } catch (error) {
-       const statusCode = error.statusCode || 500;
+        const statusCode = error.statusCode || 500;
         return res.status(statusCode).json(
             new ApiResponse(statusCode, null, error.message || "Internal Server Error")
         );
@@ -162,7 +162,7 @@ const getPublicWorkspaceById = asyncHandler(async (req, res) => {
     // }
 
     const workspace = await Workspace.findOne({ slug: slug });
-    
+
     if (!workspace) {
         throw new ApiError(404, "Workspace not found");
     }

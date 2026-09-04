@@ -8,7 +8,7 @@ import { Admin } from "../models/User.model.js";
 import { Workspace } from "../models/Workspace.model.js";
 
 const DUMMY_USER = {
-    username: "canvasmaster",
+    username: "workspacemaster",
     email: "master@gmail.com",
     passwordHash: "12345678"
 };
@@ -30,6 +30,7 @@ describe("Workspace Security & Creation Pipeline", () => {
     // SETUP: Create user and get token
     beforeEach(async () => {
         await Admin.deleteOne({ email: DUMMY_USER.email });
+        await Workspace.deleteMany({ title: "My Awesome Architecture" });
         await request(app).post("/api/v1/users/register").send(DUMMY_USER);
 
         const loginRes = await request(app).post("/api/v1/users/login").send({
@@ -57,12 +58,25 @@ describe("Workspace Security & Creation Pipeline", () => {
         testWorkspaceSlug = res.body.data.slug; // Save slug for the next test
     });
 
-    // 2. Test The Security Bouncer (403 Forbidden on Private Drafts)
-    it("should block public access to a private workspace", async () => {
-        const res = await request(app)
-            .get(`/api/v1/workspaces/public/${testWorkspaceSlug}`); // Accessing public route[cite: 35]
 
-        // Expecting 403 because isPublished is false![cite: 35]
+    it("should block public access to a private workspace", async () => {
+        // Step A: Create a fresh private workspace just for this test
+        const setupRes = await request(app)
+            .post("/api/v1/workspaces/createWorkspace")
+            .set("Cookie", [`accessToken=${accessToken}`])
+            .send({
+                title: "Top Secret Diagram",
+                diagramType: "flowchart",
+                isPublished: false // Private by default
+            });
+
+        const secureSlug = setupRes.body.data.slug;
+
+        // Step B: Attempt to access it via the public route
+        const res = await request(app)
+            .get(`/api/v1/workspaces/public/${secureSlug}`);
+
+        // Expecting 403 because isPublished is false
         expect(res.statusCode).toBe(403);
         expect(res.body.success).toBe(false);
     });

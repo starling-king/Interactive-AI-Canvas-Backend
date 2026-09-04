@@ -165,7 +165,7 @@ const logoutUser = asyncHandler(async (req, res) => {
             {
                 $unset: { refreshToken: 1 }
             },
-            { new: true }
+            { returndocument: "after" }
         )
         // const options = {
         //     httpOnly: true,
@@ -297,7 +297,7 @@ const updateAdminDetails = asyncHandler(async (req, res) => {
             {
                 $set: { username, email }
             },
-            { new: true }
+            { returndocument: "after" }
         ).select("-passwordHash -refreshToken")
         return res.status(200).json(new ApiResponse(200, admin, "Details changed successfully"))
     } catch (error) {

@@ -33,6 +33,6 @@ const CanvasGraphSchema = new mongoose.Schema({
 
 }, { timestamps: true })
 
-CanvasGraphSchema.index({ workspaceId: 1 });
+// CanvasGraphSchema.index({ workspaceId: 1 });
 
 export const CanvasGraph = mongoose.model("CanvasGraph", CanvasGraphSchema)
