@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 
 const getCanvasGraphByWorkspaceId = asyncHandler(async (req, res) => {
     try {
-        
+
         const { workspaceId } = req.params;
 
         const result = await Workspace.aggregate([
@@ -28,7 +28,7 @@ const getCanvasGraphByWorkspaceId = asyncHandler(async (req, res) => {
             {
                 $unwind: {
                     path: "$canvasData",
-                    preserveNullAndEmptyArrays: true 
+                    preserveNullAndEmptyArrays: true
                 }
             }
         ]);
@@ -42,7 +42,7 @@ const getCanvasGraphByWorkspaceId = asyncHandler(async (req, res) => {
         );
 
     } catch (error) {
-        
+
         const statusCode = error.statusCode || 500;
         return res.status(statusCode).json(
             new ApiResponse(statusCode, null, error.message || "Internal Server Error")
@@ -53,7 +53,7 @@ const getCanvasGraphByWorkspaceId = asyncHandler(async (req, res) => {
 
 const SaveCanvasGraph = asyncHandler(async (req, res) => {
     try {
-        
+
         const { workspaceId } = req.params;
         const { nodesData, edgesData, viewport, globalMetrics } = req.body;
 
@@ -77,8 +77,8 @@ const SaveCanvasGraph = asyncHandler(async (req, res) => {
                 }
             },
             {
-                upsert: true, 
-                returnDocument: "after"   
+                upsert: true,
+                returnDocument: "after"
             }
         );
 
@@ -87,11 +87,11 @@ const SaveCanvasGraph = asyncHandler(async (req, res) => {
         );
 
     } catch (error) {
-        
+
         const statusCode = error.statusCode || 500;
-                return res.status(statusCode).json(
-                    new ApiResponse(statusCode, null, error.message || "Internal Server Error")
-                );
+        return res.status(statusCode).json(
+            new ApiResponse(statusCode, null, error.message || "Internal Server Error")
+        );
 
     }
 })
