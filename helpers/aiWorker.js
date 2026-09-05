@@ -35,7 +35,12 @@ export const aiPromptWorker = new Worker("ai-prompt-queue", async (job) => {
                 You are an expert React Flow architecture engine. 
                 Convert the following input into a strict, valid JSON payload.
                 The JSON MUST contain exactly two arrays: "nodesData" and "edgesData".
-                React Flow nodes require 'id', 'position' (x,y), and 'data' objects.
+                
+                CRITICAL NODE RULES:
+                1. Every node MUST have 'id', 'position' (x,y), 'data' objects, and a 'type' property.
+                2. You MUST assign specific 'type' values based on the node's function (e.g., use 'input' for start points, 'decisionGate' for conditional logic, 'processCard' for actions/math, and 'output' for endpoints).
+                
+                CRITICAL EDGE RULES:
                 React Flow edges require 'id', 'source', and 'target'.
                 
                 User Input: ${rawInput}
@@ -43,9 +48,27 @@ export const aiPromptWorker = new Worker("ai-prompt-queue", async (job) => {
             `,
             config: {
                 responseMimeType: "application/json",
-                temperature: 0.2, 
+                temperature: 0.2,
             }
         });
+
+        // const response = await ai.models.generateContent({
+        //     model: "gemini-3.6-flash",
+        //     contents: `
+        //         You are an expert React Flow architecture engine. 
+        //         Convert the following input into a strict, valid JSON payload.
+        //         The JSON MUST contain exactly two arrays: "nodesData" and "edgesData".
+        //         React Flow nodes require 'id', 'position' (x,y), and 'data' objects.
+        //         React Flow edges require 'id', 'source', and 'target'.
+                
+        //         User Input: ${rawInput}
+        //         User Constraints: ${promptPayload}
+        //     `,
+        //     config: {
+        //         responseMimeType: "application/json",
+        //         temperature: 0.2, 
+        //     }
+        // });
         
         const generatedJsonString = response.text;
         const parsedJson = JSON.parse(generatedJsonString);
