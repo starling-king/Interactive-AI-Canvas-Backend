@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import globalError from "../error/global.error.js";
-import "../helpers/aiWorker.js";
+// import "../helpers/aiWorker.js";
 
 //routers import
 import userRouter from "../routers/user.router.js";

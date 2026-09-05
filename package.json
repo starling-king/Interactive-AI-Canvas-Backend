@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon --env-file=.env utils/index.js",
     "start": "node utils/index.js",
+    "start:worker": "node helpers/aiWorker.js",
     "test": "node --env-file=.env ./node_modules/vitest/vitest.mjs run",
     "test:watch": "node --env-file=.env ./node_modules/vitest/vitest.mjs"
   },

@@ -3,11 +3,15 @@ import IORedis from "ioredis";
 import { GoogleGenAI } from "@google/genai";
 import { AiOrchestration } from "../models/AiOrchestration.model.js";
 
-const redisConnection = new IORedis({
-    host: "127.0.0.1",
-    port: 6379,
-    maxRetriesPerRequest: null,
-});
+// const redisConnection = new IORedis({
+//     host: "127.0.0.1",
+//     port: 6379,
+//     maxRetriesPerRequest: null,
+// });
+
+const redisConnection = process.env.REDIS_URL
+    ? new IORedis(process.env.REDIS_URL, { maxRetriesPerRequest: null })
+    : new IORedis({ host: "127.0.0.1", port: 6379, maxRetriesPerRequest: null });
 
 const ai = new GoogleGenAI({});
 
