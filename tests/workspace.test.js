@@ -14,7 +14,7 @@ const DUMMY_USER = {
 };
 
 let accessToken = "";
-let testWorkspaceSlug = "";
+
 
 beforeAll(async () => {
     await connectDB();

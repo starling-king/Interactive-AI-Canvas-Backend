@@ -16,7 +16,9 @@ router.route("/refreshAccessToken").post(refreshAccessToken)
 router.route("/logout").post(verifyJwt,logoutUser)
 router.route("/changePassword").post(verifyJwt,validate(changePasswordSchema),changeCurrentPassword)
 router.route("/getCurrentUser").get(verifyJwt,getCurrentUser)
-router.route("/updateAdminDetails").post(verifyJwt,validate(updateAdminSchema),updateAdminDetails)
+router.route("/updateAdminDetails").post(verifyJwt, validate(updateAdminSchema), updateAdminDetails)
+
+
 export default router
 
 

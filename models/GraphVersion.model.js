@@ -34,6 +34,6 @@ const GraphVersionSchema = new mongoose.Schema(
         }
     }, { timestamps: true });
 
-GraphVersionSchema.index({ workspaceId: 1, versionNumber: -1 });
+GraphVersionSchema.index({ workspaceId: 1, versionNumber: -1 }, { unique: true });
 
 export const GraphVersion = mongoose.model("GraphVersion", GraphVersionSchema);
