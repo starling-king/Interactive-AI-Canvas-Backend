@@ -77,8 +77,8 @@ const SaveCanvasGraph = asyncHandler(async (req, res) => {
                 }
             },
             {
-                upsert: true, // Create if it doesn't exist
-                new: true     // Return the newly updated document
+                upsert: true, 
+                returnDocument: "after"   
             }
         );
 
