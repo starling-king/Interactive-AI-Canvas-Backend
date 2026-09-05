@@ -55,7 +55,7 @@ describe("Workspace Security & Creation Pipeline", () => {
         expect(res.body.success).toBe(true);
         expect(res.body.data.slug).toBeDefined();
 
-        testWorkspaceSlug = res.body.data.slug; // Save slug for the next test
+        // testWorkspaceSlug = res.body.data.slug; // Save slug for the next test
     });
 
 
