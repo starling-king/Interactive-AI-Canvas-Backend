@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --env-file=.env utils/index.js",
-    "start": "node utils/index.js",
+    "start": "concurrently -k \"node utils/index.js\" \"node helpers/aiWorker.js\"",
     "start:worker": "node helpers/aiWorker.js",
     "test": "node --env-file=.env ./node_modules/vitest/vitest.mjs run",
     "test:watch": "node --env-file=.env ./node_modules/vitest/vitest.mjs"
@@ -19,6 +19,7 @@
     "bcrypt": "^6.0.0",
     "bullmq": "^6.2.1",
     "cloudinary": "^2.10.1",
+    "concurrently": "^10.0.5",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

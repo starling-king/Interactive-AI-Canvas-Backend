@@ -2,6 +2,7 @@ import { Worker } from "bullmq";
 import IORedis from "ioredis";
 import { GoogleGenAI } from "@google/genai";
 import { AiOrchestration } from "../models/AiOrchestration.model.js";
+import connectDB from "../data/connect.js";
 
 // const redisConnection = new IORedis({
 //     host: "127.0.0.1",
@@ -14,6 +15,8 @@ const redisConnection = process.env.REDIS_URL
     : new IORedis({ host: "127.0.0.1", port: 6379, maxRetriesPerRequest: null });
 
 const ai = new GoogleGenAI({});
+
+connectDB();
 
 export const aiPromptWorker = new Worker("ai-prompt-queue", async (job) => {
     const { orchestrationId, rawInput, promptPayload } = job.data;
