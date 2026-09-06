@@ -32,6 +32,7 @@ jobs:
           REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
           ACCESS_TOKEN_EXPIRY: "3d"
           REFRESH_TOKEN_EXPIRY: "10d"
+          CORS_ORIGIN: "*"
         run: npm run test
 
       # ---------------------------------------------------------
