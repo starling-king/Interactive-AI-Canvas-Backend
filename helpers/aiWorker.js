@@ -46,6 +46,8 @@ export const aiPromptWorker = new Worker("ai-prompt-queue", async (job) => {
                 CRITICAL NODE RULES:
                 1. Every node MUST have 'id', 'position' (x,y), 'data' objects, and a 'type' property.
                 2. You MUST assign specific 'type' values based on the node's function (e.g., use 'input' for start points, 'decisionGate' for conditional logic, 'processCard' for actions/math, and 'output' for endpoints).
+
+                CRITICAL MATH RULES: If a 'processCard' node performs calculations, you MUST include a 'formulas' array inside its 'data' object. Each string in the array must be a valid mathematical assignment (e.g., formulas: ['engineLoad = speed * 1.8', 'fuel = engineLoad / 10']).
                 
                 CRITICAL EDGE RULES:
                 React Flow edges require 'id', 'source', and 'target'.

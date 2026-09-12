@@ -55,14 +55,6 @@ const getAllAdminWorkspaces = asyncHandler(async (req, res) => {
     //return the response
     try {
 
-        // const projectdata = await Workspace.find({ createdByAdminId: req.user?._id })
-
-        // const matchConditions = {
-        //     createdByAdminId: new mongoose.Types.ObjectId(req.user._id)
-        // }
-
-        // const projectdata = await Workspace.aggregate(buildWorkspacePipeline(matchConditions))
-
         const workspaces = await Workspace.find({ userId: req.user._id }).sort({ createdAt: -1 });
 
         if (workspaces.length === 0) {
