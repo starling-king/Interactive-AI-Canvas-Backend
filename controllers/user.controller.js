@@ -6,8 +6,8 @@ import jwt from "jsonwebtoken"
 
 const options = {
     httpOnly: true,
-    // secure: true,
-    // sameSite: "None",
+    secure: true,
+    sameSite: "None",
     path: "/"
 }
 

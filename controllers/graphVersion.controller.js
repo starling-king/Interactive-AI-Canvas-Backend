@@ -148,15 +148,11 @@ const restoreVersion = asyncHandler(async (req, res) => {
                 _id: targetVersion.workspaceId,
                 userId: req.user._id
             }).select("_id"),
+
             GraphVersion.findOne({ workspaceId: targetVersion.workspaceId })
                 .sort({ versionNumber: -1 })
                 .select("versionNumber")
         ]);
-
-        // const workspace = await Workspace.findOne({
-        //     _id: targetVersion.workspaceId,
-        //     userId: req.user._id
-        // }).select("_id");
 
 
         if (!workspace) {
@@ -178,19 +174,16 @@ const restoreVersion = asyncHandler(async (req, res) => {
             { returnDocument: "after" }
         );
 
-        // const lastVersion = await GraphVersion.findOne({ workspaceId: workspace._id })
-        //     .sort({ versionNumber: -1 })
-        //     .select("versionNumber");
+    
+        // const nextVersionNumber = lastVersion ? lastVersion.versionNumber + 1 : 1;
 
-        const nextVersionNumber = lastVersion ? lastVersion.versionNumber + 1 : 1;
-
-        await GraphVersion.create({
-            workspaceId: workspace._id,
-            versionNumber: nextVersionNumber,
-            changeSummary: `Restored back to Version ${targetVersion.versionNumber}`,
-            stateSnapshot: targetVersion.stateSnapshot,
-            createdBy: req.user._id
-        });
+        // await GraphVersion.create({
+        //     workspaceId: workspace._id,
+        //     versionNumber: nextVersionNumber,
+        //     changeSummary: `Restored back to Version ${targetVersion.versionNumber}`,
+        //     stateSnapshot: targetVersion.stateSnapshot,
+        //     createdBy: req.user._id
+        // });
 
         return res.status(200).json(
             new ApiResponse(200, restoredCanvas, `Successfully restored canvas to Version ${targetVersion.versionNumber}`)
